@@ -11,3 +11,7 @@
 
  ### obtengo: ###
 ![Alt text](documentation/JacocoReport.png?raw=true "Jacoco Report")
+
+# Posibles Mejoras #
+ - Quizás usar alguna format (o libreria para construir Strings, tipo templates) para la parte de rellenar los DatosBravo, DatosUsuario
+ - 
