@@ -65,11 +65,11 @@
       <artifactId>async-http-client</artifactId>
       <version>1.9.31</version>
     </dependency>
-    <!-- <dependency>
+    <dependency>
       <groupId>sanitas.bravo.clientes</groupId>
       <artifactId>sportalclientesweb</artifactId>
       <version>1.19.0</version>
-    </dependency> -->
+    </dependency>
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
