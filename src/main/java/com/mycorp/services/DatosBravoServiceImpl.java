@@ -7,12 +7,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.mycorp.constants.Constants;
 import com.mycorp.support.DatosCliente;
 import com.mycorp.support.ValueCode;
 
+@Service
 public class DatosBravoServiceImpl implements DatosBravoService {
     private static final Logger LOG = LoggerFactory.getLogger(DatosBravoServiceImpl.class);
 
