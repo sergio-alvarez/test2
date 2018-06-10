@@ -37,7 +37,7 @@ public class Zendesk implements Closeable {
     @Qualifier("zendesk")
     private ObjectMapper mapper;
 
-    private Zendesk(String url, String username, String password) {
+    public Zendesk(String url, String username, String password) {
 	this.oauthToken = null;
 	this.client = new AsyncHttpClient();
 	this.url = url.endsWith("/") ? url + "api/v2" : url + "/api/v2";
@@ -131,42 +131,4 @@ public class Zendesk implements Closeable {
 	}
     }
 
-    public static class Builder {
-	private final String url;
-	private String username = null;
-	private String password = null;
-	private String token = null;
-
-	public Builder(String url) {
-	    this.url = url;
-	}
-
-	public Builder setUsername(String username) {
-	    this.username = username;
-	    return this;
-	}
-
-	public Builder setPassword(String password) {
-	    this.password = password;
-	    if (password != null) {
-		this.token = null;
-	    }
-	    return this;
-	}
-
-	public Builder setToken(String token) {
-	    this.token = token;
-	    if (token != null) {
-		this.password = null;
-	    }
-	    return this;
-	}
-
-	public Zendesk build() {
-	    if (token != null) {
-		return new Zendesk(url, username + "/token", token);
-	    }
-	    return new Zendesk(url, username, password);
-	}
-    }
 }

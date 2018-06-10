@@ -28,25 +28,13 @@ public class ZendeskServiceImpl implements ZendeskService {
     private static final Logger LOG = LoggerFactory.getLogger(ZendeskServiceImpl.class);
 
     @Value("#{envPC['zendesk.ticket']}")
-    public String PETICION_ZENDESK = "";
-
-    @Value("#{envPC['zendesk.token']}")
-    public String TOKEN_ZENDESK = "";
-
-    @Value("#{envPC['zendesk.url']}")
-    public String URL_ZENDESK = "";
-
-    @Value("#{envPC['zendesk.user']}")
-    public String ZENDESK_USER = "";
-
-    @Value("#{envPC['cliente.getDatos']}")
-    public String CLIENTE_GETDATOS = "";
+    public String zendeskTicket = "";
 
     @Value("#{envPC['zendesk.error.mail.funcionalidad']}")
-    public String ZENDESK_ERROR_MAIL_FUNCIONALIDAD = "";
+    public String zendeskErrorMail = "";
 
     @Value("#{envPC['zendesk.error.destinatario']}")
-    public String ZENDESK_ERROR_DESTINATARIO = "";
+    public String zendeskErrorDestinatario = "";
 
     @Autowired
     @Qualifier("emailService")
@@ -57,6 +45,9 @@ public class ZendeskServiceImpl implements ZendeskService {
 
     @Autowired
     DatosBravoService datosBravoService;
+
+    @Autowired
+    Zendesk zendesk;
 
     @Autowired
     @Qualifier("onlyIndentOutput")
@@ -76,12 +67,11 @@ public class ZendeskServiceImpl implements ZendeskService {
 		clientService.getIdClient(usuarioAlta, clientName, datosServicio), getTiposDocumentosRegistro());
 
 	// creamos el ticket
-	String ticket = String.format(PETICION_ZENDESK, clientName.toString(), usuarioAlta.getEmail(),
+	String ticket = String.format(zendeskTicket, clientName.toString(), usuarioAlta.getEmail(),
 		datosUsuario.toString() + datosBravo + parseJsonBravo(datosServicio));
 	ticket = ticket.replaceAll("[" + Constants.ESCAPED_LINE_SEPARATOR + "]", " ");
 
-	try (Zendesk zendesk = new Zendesk.Builder(URL_ZENDESK).setUsername(ZENDESK_USER).setToken(TOKEN_ZENDESK)
-		.build()) {
+	try {
 	    // Ticket
 	    Ticket petiZendesk = mapper.readValue(ticket, Ticket.class);
 	    zendesk.createTicket(petiZendesk);
@@ -90,12 +80,12 @@ public class ZendeskServiceImpl implements ZendeskService {
 	    LOG.error("Error al crear ticket ZENDESK", e);
 	    // Send email
 
-	    CorreoElectronico correo = new CorreoElectronico(Long.parseLong(ZENDESK_ERROR_MAIL_FUNCIONALIDAD), "es")
+	    CorreoElectronico correo = new CorreoElectronico(Long.parseLong(zendeskErrorMail), "es")
 		    .addParam(datosUsuario.toString().replaceAll(Constants.ESCAPE_ER + Constants.ESCAPED_LINE_SEPARATOR,
 			    Constants.HTML_BR))
 		    .addParam(datosBravo.replaceAll(Constants.ESCAPE_ER + Constants.ESCAPED_LINE_SEPARATOR,
 			    Constants.HTML_BR));
-	    correo.setEmailA(ZENDESK_ERROR_DESTINATARIO);
+	    correo.setEmailA(zendeskErrorDestinatario);
 	    try {
 		emailService.enviar(correo);
 	    } catch (Exception ex) {
