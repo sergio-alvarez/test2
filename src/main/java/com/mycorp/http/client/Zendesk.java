@@ -55,7 +55,7 @@ public class Zendesk implements Closeable {
     public Ticket createTicket(Ticket ticket) {
 	return complete(
 		submit(req("POST", cnst("/tickets.json"), JSON, json(Collections.singletonMap("ticket", ticket))),
-			new BasicAsyncCompletionHandler<Ticket>(Ticket.class, "ticket")));
+			new BasicAsyncCompletionHandler<Ticket>(Ticket.class, "ticket", mapper)));
     }
 
     private byte[] json(Object object) {

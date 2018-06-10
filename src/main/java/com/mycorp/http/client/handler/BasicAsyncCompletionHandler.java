@@ -4,8 +4,6 @@ import java.io.IOException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -19,15 +17,13 @@ public class BasicAsyncCompletionHandler<T> extends AsyncCompletionHandler<T> {
     private final Class<T> clazz;
     private final String name;
     private final Class[] typeParams;
+    private final ObjectMapper mapper;
 
-    @Autowired
-    @Qualifier("zendesk")
-    private ObjectMapper mapper;
-
-    public BasicAsyncCompletionHandler(Class clazz, String name, Class... typeParams) {
+    public BasicAsyncCompletionHandler(Class clazz, String name, ObjectMapper mapper, Class... typeParams) {
 	this.clazz = clazz;
 	this.name = name;
 	this.typeParams = typeParams;
+	this.mapper = mapper;
     }
 
     @Override
